@@ -1,79 +1,60 @@
-using System;
-
 namespace DesafioFundamentos.Models
 {
-    class Estacionamento
+    public class Estacionamento
     {
-        private decimal PrecoInicial { get; }
-        private decimal PrecoPorHora { get; }
-
-        // Lista para armazenar veículos
-        private List<Veiculo> veiculos;
+        private decimal precoInicial = 0;
+        private decimal precoPorHora = 0;
+        private List<string> veiculos = new List<string>();
 
         public Estacionamento(decimal precoInicial, decimal precoPorHora)
         {
-            PrecoInicial = precoInicial;
-            PrecoPorHora = precoPorHora;
-            veiculos = new List<Veiculo>();
+            this.precoInicial = precoInicial;
+            this.precoPorHora = precoPorHora;
         }
 
         public void AdicionarVeiculo()
         {
-            Console.WriteLine("Digite a placa do veículo:");
+            Console.WriteLine("Digite a placa do veículo para estacionar:");
             string placa = Console.ReadLine();
-
-            Console.WriteLine("Digite o modelo do veículo:");
-            string modelo = Console.ReadLine();
-
-            // Crie um novo objeto Veiculo
-            Veiculo novoVeiculo = new Veiculo(placa, modelo);
-
-            // Adicione o veículo à lista
-            veiculos.Add(novoVeiculo);
-
-            Console.WriteLine($"Veículo {modelo} cadastrado com sucesso!");
+            veiculos.Add(placa.ToUpper());
+            Console.WriteLine($"Veículo com placa {placa} estacionado com sucesso!");
         }
 
         public void RemoverVeiculo()
         {
-            Console.WriteLine("Digite a placa do veículo a ser removido:");
+            Console.WriteLine("Digite a placa do veículo para remover:");
             string placa = Console.ReadLine();
 
-            // Encontre o veículo na lista
-            Veiculo veiculoRemover = veiculos.FirstOrDefault(v => v.Placa == placa);
-
-            if (veiculoRemover != null)
+            if (veiculos.Contains(placa.ToUpper()))
             {
-                // Remova o veículo da lista
-                veiculos.Remove(veiculoRemover);
-                Console.WriteLine($"Veículo {veiculoRemover.Modelo} removido com sucesso!");
+                Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
+                int horas = Convert.ToInt32(Console.ReadLine());
+                decimal valorTotal = precoInicial + precoPorHora * horas;
+
+                veiculos.Remove(placa.ToUpper());
+
+                Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
             }
             else
             {
-                Console.WriteLine("Veículo não encontrado.");
+                Console.WriteLine("Desculpe, esse veículo não está estacionado aqui. Confira se digitou a placa corretamente");
             }
         }
 
         public void ListarVeiculos()
         {
-            Console.WriteLine("Lista de veículos estacionados:");
-
-            foreach (var veiculo in veiculos)
+            if (veiculos.Any())
             {
-                Console.WriteLine($"Placa: {veiculo.Placa}, Modelo: {veiculo.Modelo}");
+                Console.WriteLine("Os veículos estacionados são:");
+                foreach (var veiculo in veiculos)
+                {
+                    Console.WriteLine($"Placa: {veiculo}");
+                }
             }
-        }
-    }
-
-    class Veiculo
-    {
-        public string Placa { get; }
-        public string Modelo { get; }
-
-        public Veiculo(string placa, string modelo)
-        {
-            Placa = placa;
-            Modelo = modelo;
+            else
+            {
+                Console.WriteLine("Não há veículos estacionados.");
+            }
         }
     }
 }
