@@ -1,67 +1,79 @@
+using System;
+
 namespace DesafioFundamentos.Models
 {
-    public class Estacionamento
+    class Estacionamento
     {
-        private decimal precoInicial = 0;
-        private decimal precoPorHora = 0;
-        private List<string> veiculos = new List<string>();
+        private decimal PrecoInicial { get; }
+        private decimal PrecoPorHora { get; }
+
+        // Lista para armazenar veículos
+        private List<Veiculo> veiculos;
 
         public Estacionamento(decimal precoInicial, decimal precoPorHora)
         {
-            this.precoInicial = precoInicial;
-            this.precoPorHora = precoPorHora;
+            PrecoInicial = precoInicial;
+            PrecoPorHora = precoPorHora;
+            veiculos = new List<Veiculo>();
         }
 
         public void AdicionarVeiculo()
         {
-            // TODO: Pedir para o usuário digitar uma placa (ReadLine) e adicionar na lista "veiculos"
-            // *IMPLEMENTE AQUI*
-            Console.WriteLine("Digite a placa do veículo para estacionar:");
+            Console.WriteLine("Digite a placa do veículo:");
+            string placa = Console.ReadLine();
+
+            Console.WriteLine("Digite o modelo do veículo:");
+            string modelo = Console.ReadLine();
+
+            // Crie um novo objeto Veiculo
+            Veiculo novoVeiculo = new Veiculo(placa, modelo);
+
+            // Adicione o veículo à lista
+            veiculos.Add(novoVeiculo);
+
+            Console.WriteLine($"Veículo {modelo} cadastrado com sucesso!");
         }
 
         public void RemoverVeiculo()
         {
-            Console.WriteLine("Digite a placa do veículo para remover:");
+            Console.WriteLine("Digite a placa do veículo a ser removido:");
+            string placa = Console.ReadLine();
 
-            // Pedir para o usuário digitar a placa e armazenar na variável placa
-            // *IMPLEMENTE AQUI*
-            string placa = "";
+            // Encontre o veículo na lista
+            Veiculo veiculoRemover = veiculos.FirstOrDefault(v => v.Placa == placa);
 
-            // Verifica se o veículo existe
-            if (veiculos.Any(x => x.ToUpper() == placa.ToUpper()))
+            if (veiculoRemover != null)
             {
-                Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
-
-                // TODO: Pedir para o usuário digitar a quantidade de horas que o veículo permaneceu estacionado,
-                // TODO: Realizar o seguinte cálculo: "precoInicial + precoPorHora * horas" para a variável valorTotal                
-                // *IMPLEMENTE AQUI*
-                int horas = 0;
-                decimal valorTotal = 0; 
-
-                // TODO: Remover a placa digitada da lista de veículos
-                // *IMPLEMENTE AQUI*
-
-                Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
+                // Remova o veículo da lista
+                veiculos.Remove(veiculoRemover);
+                Console.WriteLine($"Veículo {veiculoRemover.Modelo} removido com sucesso!");
             }
             else
             {
-                Console.WriteLine("Desculpe, esse veículo não está estacionado aqui. Confira se digitou a placa corretamente");
+                Console.WriteLine("Veículo não encontrado.");
             }
         }
 
         public void ListarVeiculos()
         {
-            // Verifica se há veículos no estacionamento
-            if (veiculos.Any())
+            Console.WriteLine("Lista de veículos estacionados:");
+
+            foreach (var veiculo in veiculos)
             {
-                Console.WriteLine("Os veículos estacionados são:");
-                // TODO: Realizar um laço de repetição, exibindo os veículos estacionados
-                // *IMPLEMENTE AQUI*
+                Console.WriteLine($"Placa: {veiculo.Placa}, Modelo: {veiculo.Modelo}");
             }
-            else
-            {
-                Console.WriteLine("Não há veículos estacionados.");
-            }
+        }
+    }
+
+    class Veiculo
+    {
+        public string Placa { get; }
+        public string Modelo { get; }
+
+        public Veiculo(string placa, string modelo)
+        {
+            Placa = placa;
+            Modelo = modelo;
         }
     }
 }
